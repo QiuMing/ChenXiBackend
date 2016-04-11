@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * 角色
@@ -12,42 +11,44 @@ import java.util.Set;
  *
  */
 @Entity
+@Table(name="role")
 public class Role implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
+	@Column(name = "role_id")
+    private Integer roleId;
 
-    @Column(nullable = false)
+    @Column(name="role_name",nullable = false)
     private String roleName;
 
 	// 建立多对多关系表
 	@ManyToMany(cascade={CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY)
 	@JoinTable(name="role_permission", 
-			joinColumns = {@JoinColumn(name="role_id",referencedColumnName ="id")},
+			joinColumns = {@JoinColumn(name="role_id",referencedColumnName ="role_id")},
 			inverseJoinColumns = {@JoinColumn(name="permission_id",referencedColumnName="id")})    
     private List<Permission> permissions;
     
-	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY, mappedBy="roles")
-    private Set<User> users;
+	//@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.LAZY, mappedBy="roles")
+    //private Set<User> users;
     
-    protected Role() {
-
+    public Role() {
+		super();
     }
 
-	public Role(Integer id, String roleName) {
-		this.id = id;
+	public Role(Integer roleId, String roleName) {
+		this.roleId = roleId;
 		this.roleName = roleName;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getRoleId() {
+		return roleId;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 
 	public String getRoleName() {
@@ -66,13 +67,13 @@ public class Role implements Serializable {
 		this.permissions = permissions;
 	}
 
-	public Set<User> getUsers() {
+	/*public Set<User> getUsers() {
 		return users;
 	}
 
 	public void setUsers(Set<User> users) {
 		this.users = users;
-	}
+	}*/
 
 	/**
 	 * 获取Shiro需要的permission string格式
@@ -86,5 +87,5 @@ public class Role implements Serializable {
 		}
 		return permissionStrs;
 	}
-	
+
 }

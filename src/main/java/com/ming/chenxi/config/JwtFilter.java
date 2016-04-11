@@ -28,7 +28,7 @@ public class JwtFilter extends GenericFilterBean {
 
         final String token = authHeader.substring(7); // The part after "Bearer "
 
-        //获取claims ，这里会验证 下token 是否正确，不正确则抛出异常，正常则把claims 放到session中
+        //获取claims ，这里会验证 下token 是否正确，不正确则抛出异常，正常则把claims 放到request中
         try {
             final Claims claims = Jwts.parser().setSigningKey("secretkey").parseClaimsJws(token).getBody();
             request.setAttribute("claims", claims);

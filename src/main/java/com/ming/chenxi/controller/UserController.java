@@ -1,8 +1,15 @@
 package com.ming.chenxi.controller;
 
+import com.ming.chenxi.domain.User;
+import com.ming.chenxi.service.UserServiceI;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import java.util.*;
@@ -11,6 +18,9 @@ import java.util.*;
 @RequestMapping("/user")
 public class UserController {
 
+    @Autowired
+    private UserServiceI userServiceI;
+
     private final Map<String, List<String>> userDb = new HashMap<>();
 
     public UserController() {
@@ -18,32 +28,57 @@ public class UserController {
         userDb.put("sally", Arrays.asList("user", "admin"));
     }
 
-
     /**
      * 登陆成功，设置sub,是claim 默认的字段，并且设置自定义的roles 字段
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public LoginResponse login(@RequestBody final UserLogin login)
+    public LoginResponse login(@RequestBody final  User loginUser)
         throws ServletException {
-        if (login.name == null || !userDb.containsKey(login.name)) {
-            throw new ServletException("Invalid login");
+
+        User getUserByUserName = userServiceI.getUserByPhone(loginUser.getPhone());
+        if(getUserByUserName==null){
+            throw new ServletException("Invalid userName");
         }
-        return new LoginResponse(Jwts.builder().setSubject(login.name)
-            .claim("roles", userDb.get(login.name)).setIssuedAt(new Date())
+
+
+        if (!getUserByUserName.getPassword().equals(loginUser.getPassword())) {
+            throw new ServletException("Invalid password");
+        }
+        return new LoginResponse(Jwts.builder().setSubject(getUserByUserName.getPhone())
+            .claim("roles", userDb.get(loginUser.getPhone())).setIssuedAt(new Date())
             .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
     }
 
+    /**
+     * 注册成功后也返回token
+     */
+    @RequestMapping(value = "register", method = RequestMethod.POST)
+    public LoginResponse register(@RequestBody   User registerUser)throws ServletException{
 
-    @SuppressWarnings("unused")
-    private static class UserLogin {
-        public String name;
-        public String password;
+        System.out.println("jjKKKKKKKKKKKKKKjjjjjjj");
+
+        if(StringUtils.isEmpty(registerUser.getPassword())
+                ||StringUtils.isEmpty(registerUser.getPhone())){
+            throw new ServletException("Erro data");
+        }
+        User getUserByUserName = userServiceI.getUserByPhone(registerUser.getPhone());
+        if(getUserByUserName!=null) {
+            throw new ServletException("Exist user");
+        }
+
+        userServiceI.addUser(registerUser);
+        return new LoginResponse(Jwts.builder().setSubject(registerUser.getPhone())
+                .claim("roles", userDb.get(registerUser.getPassword())).setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, "secretkey").compact());
     }
 
-    @SuppressWarnings("unused")
+    @RequestMapping(value = "a")
+    public User a(){
+        System.out.println("jjjjjjjjjjjjjjj");
+        return  new User("kkk","hh");
+    }
     private static class LoginResponse {
         public String token;
-
         public LoginResponse(final String token) {
             this.token = token;
         }
