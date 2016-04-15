@@ -5,10 +5,10 @@
 * 在bash  下使用 下面的curl 命令，注册、登陆成功均返回token 
 ##模拟注册
 
-* curl -H "Content-Type:application/json" -X POST -d '{"password":"aaa","phone":"safsad"}' http://127.0.0.1:8080/user/register
+* curl -H "Content-Type:application/json" -X POST -d '{"password":"aaa","phone":"safsad"}' http://127.0.0.1:8080/chenxi/user/register
 
 ##模拟登陆 
-* curl -i -X POST -H "Content-Type:application/json" -d '{"password":"aaa","phone":"aaaaaaa"}' http://127.0.0.1:8080/user/login
+* curl -i -X POST -H "Content-Type:application/json" -d '{"password":"aaa","phone":"aaaaaaa"}' http://127.0.0.1:8080/chenxi/user/login
 
 ##接下来想做的事
 * 接入spring security

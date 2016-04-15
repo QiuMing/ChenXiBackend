@@ -68,6 +68,13 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
+	public UserProfile getUserProfile() {
+		return userProfile;
+	}
+
+	public void setUserProfile(UserProfile userProfile) {
+		this.userProfile = userProfile;
+	}
 	/*public Set<Role> getRoles() {
 		return roles;
 	}
