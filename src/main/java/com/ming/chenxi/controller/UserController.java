@@ -122,7 +122,7 @@ public class UserController {
 
     @RequestMapping(value = "/test")
     public User a(){
-        System.out.println("jjjjjjjjjjjjjjj");
+        System.out.println("测试响应");
         return  new User("kkk","hh");
     }
 

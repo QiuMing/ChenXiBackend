@@ -38,7 +38,6 @@ public class ApiController {
     @RequestMapping(value = "user/{username}", method = RequestMethod.GET)
     public UserProfile getUserProfile(@PathVariable final String username,
                                       final HttpServletRequest request) throws ServletException {
-
         User user = userServiceI.getUserByPhone(username);
         if(user==null)
             return null;
