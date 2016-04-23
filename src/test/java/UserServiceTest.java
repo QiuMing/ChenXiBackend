@@ -1,11 +1,13 @@
 import com.alibaba.fastjson.JSON;
-import com.ming.chenxi.domain.User;
 import com.ming.chenxi.domain.UserProfile;
+import com.ming.chenxi.repository.NutritionRepository;
 import com.ming.chenxi.repository.UserProfileRepository;
 import com.ming.chenxi.repository.UserRepository;
 import com.ming.chenxi.service.UserServiceI;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 /**
@@ -22,6 +24,8 @@ public class UserServiceTest extends  AbstractServiceTests {
     @Autowired
     protected UserProfileRepository userProfileRepository;
 
+    @Autowired
+    protected NutritionRepository nutritionRepository;
     @Test
     public void test_findByUsername(){
         System.out.println(JSON.toJSONString(userRepository.findByPhone("admin")));
@@ -41,11 +45,17 @@ public class UserServiceTest extends  AbstractServiceTests {
     @Rollback(false)
     @Test
     public void test_save_user_profile(){
-        UserProfile userProfile = new UserProfile();
-        userProfile.setAge(12);
-        userProfile.setHeight(12.21);
-        userProfile.setUserId(1);
-        userProfileRepository.save(userProfile);
+        for(int i = 11;i<98;i++) {
+            /*User  a = new User();
+            a.setPassword("7c4a8d09ca3762af61e59520943dc26494f8941b");
+            a.setPhone(i+"24343242");
+            userRepository.save(a);*/
+            UserProfile userProfile = new UserProfile();
+            userProfile.setAge(12+i);
+            userProfile.setHeight(12.21);
+            userProfile.setUserId(i);
+            userProfileRepository.save(userProfile);
+        }
     }
 
     @Test
@@ -58,11 +68,15 @@ public class UserServiceTest extends  AbstractServiceTests {
        // System.out.println(JSON.toJSONString(userProfileRepository.getUserProfileByUserProfileId(1)));
         System.out.println(JSON.toJSONString(userProfileRepository.getUserProfileByPhone("测试")));
     }
-    public static void main(String[] args) {
-        final User user = new User("aaa","aaa");
-        System.out.println(JSON.toJSONString(user));
+    @Test
+    public void test_nutritionRepository_findAll(){
+        Pageable pageable = new PageRequest(0, 10);
+        System.out.println(JSON.toJSONString(nutritionRepository.findAll(pageable)));
+    }
 
-        System.out.printf(user.getPhone());
-        System.out.printf(user.getPhone());
+    @Test
+    public void test_userProfileRepository_findAll(){
+        Pageable pageable = new PageRequest(0, 10);
+         System.out.println(JSON.toJSONString(userProfileRepository.findAll(pageable)));
     }
 }

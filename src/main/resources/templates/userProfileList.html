@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+
+    <title>晨曦 Android App 后台</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../static/bower_components/bootstrap/dist/css/bootstrap.min.css"
+          th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"
+          rel="stylesheet"/>
+
+    <!-- MetisMenu CSS -->
+    <link href="../static/bower_components/metisMenu/dist/metisMenu.min.css"
+          th:href="@{/bower_components/metisMenu/dist/metisMenu.min.css}"
+          rel="stylesheet"/>
+
+    <!-- DataTables CSS -->
+    <link href="../static/bower_components/bootstrap-table/dist/bootstrap-table.css"
+          th:href="@{/bower_components/bootstrap-table/dist/bootstrap-table.css}"
+          rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link href="../static/dist/css/sb-admin-2.css"
+          th:href="@{/dist/css/sb-admin-2.css}"
+          rel="stylesheet"/>
+
+    <!-- Custom Fonts -->
+    <link href="../static/bower_components/font-awesome/css/font-awesome.min.css"
+          th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}"
+          rel="stylesheet" type="text/css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+<div id="wrapper">
+
+    <div th:replace="fragments/nav :: nav"></div>
+
+
+    <div id="page-wrapper">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-header">用户列表</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        用户列表
+                    </div>
+
+                    <div class="panel-body">
+                       <table id="table" >
+                            <thead>
+                                <tr>
+                                    <th data-field="userProfileId">User Id</th>
+                                    <th data-field="age"> age</th>
+                                    <th data-field="height"> height</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- jQuery -->
+<script src="../static/bower_components/jquery/dist/jquery.min.js"
+        th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../static/bower_components/bootstrap/dist/js/bootstrap.min.js"
+        th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../static/bower_components/metisMenu/dist/metisMenu.min.js"
+        th:src="@{/bower_components/metisMenu/dist/metisMenu.min.js}"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../static/dist/js/sb-admin-2.js"
+        th:src="@{/dist/js/sb-admin-2.js}"></script>
+
+
+<script src="../static/bower_components/bootstrap-table/dist/bootstrap-table.js"
+        th:src="@{/bower_components/bootstrap-table/dist/bootstrap-table.js}"></script>
+<script>
+
+
+$(function () {
+    $('#table').bootstrapTable({
+        method: 'get',
+        url: "getUserProfileList",
+        cache: false,
+        height: 400,
+        dataType: "json",
+        // contentType: "application/x-www-form-urlencoded",
+        striped: true,  // 隔行加亮
+        pagination: true,
+        pageNumber:0,
+        pageSize: 10,
+        pageList: [10, 25],
+        search: false, //不显示 搜索框
+        showColumns: false, //不显示下拉框（选择显示的列）
+        sidePagination: "server",   //分页方式：client客户端分页，server服务端分页（*）
+        minimumCountColumns: 2,
+        clickToSelect: true,
+        queryParams: queryParams,
+        columns: [{
+            field: 'userProfileId',
+            align : 'center'
+        },{
+            field: 'age',
+            align : 'center'
+        },{
+            field: 'height',
+            align : 'center'
+        }]
+    });
+
+    function queryParams(params) {
+        return {
+          /*  pageSize: params.pageSize,
+            pageNumber: params.pageNumber
+           offset: params.offset, //页码
+           */
+            pageSize: params.limit, //页面大小
+            pageNumber: params.pageNumber
+        };
+    }
+
+    /*
+    bootstrap  table  如果使用server端进行 分页的话，在 点击 页码 的时候，bootstrap -table  会默认根据 页码向后台 发送 limit（每页面数量）   和  offset（偏移量）  这 两个参数，
+      当然 用户 可以 定义 queryParams(params) 函数，自定义 参数，
+      另外 ，params  中 没有 提供 pageNumber  ，可以 自己 根据 offset  和limit  计算，也可以 直接修改 bootstrap-table 的 源码，添加 一行即可
+
+     if (this.options.queryParamsType === 'limit') {
+         params = {
+             search: params.searchText,
+             sort: params.sortName,
+             order: params.sortOrder
+         };
+         if (this.options.pagination) {
+             params.limit = this.options.pageSize === this.options.formatAllRows() ?
+             this.options.totalRows : this.options.pageSize;
+             params.offset = this.options.pageSize === this.options.formatAllRows() ?
+             0 : this.options.pageSize * (this.options.pageNumber - 1);
+             params.pageNumber = this.options.pageNumber;     //添加 一个  pageNumber ,避免 每次 都自己计算
+         }
+     }
+
+     */
+});
+</script>
+</body>
+
+</html>

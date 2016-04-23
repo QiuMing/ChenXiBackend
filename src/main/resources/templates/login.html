@@ -9,25 +9,25 @@
     <meta name="description" content=""/>
     <meta name="author" content=""/>
 
-    <title>SB Admin 2 - Bootstrap Admin Theme</title>
+    <title>晨曦 Android App 后台</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="../../../../../boot-common/src/main/resources/static/bower_components/bootstrap/dist/css/bootstrap.min.css"
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css"
           th:href="@{/bower_components/bootstrap/dist/css/bootstrap.min.css}"
           rel="stylesheet" media="screen"/>
 
     <!-- MetisMenu CSS -->
-    <link href="../../../../../boot-common/src/main/resources/static/bower_components/metisMenu/dist/metisMenu.min.css"
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css"
           th:href="@{/bower_components/metisMenu/dist/metisMenu.min.css}"
           rel="stylesheet"/>
 
     <!-- Custom CSS -->
-    <link href="../../../../../boot-common/src/main/resources/static/dist/css/sb-admin-2.css"
+    <link href="../dist/css/sb-admin-2.css"
           th:href="@{/dist/css/sb-admin-2.css}"
           rel="stylesheet"/>
 
     <!-- Custom Fonts -->
-    <link href="../../../../../boot-common/src/main/resources/static/bower_components/font-awesome/css/font-awesome.min.css"
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css"
           th:href="@{/bower_components/font-awesome/css/font-awesome.min.css}"
           rel="stylesheet" type="text/css"/>
 
@@ -47,7 +47,7 @@
             <div class="col-md-4 col-md-offset-4">
                 <div class="login-panel panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title" >Please Sign In</h3>
+                        <h3 class="panel-title" >晨曦 App  后台登陆</h3>
                     </div>
                     <div class="panel-body">
 
@@ -56,7 +56,7 @@
 
                         <div  th:if="${message != null}" th:text="${message}" class="alert alert-warning">User  not exist</div>
 
-                        <form role="form" action="login" method="post" th:action="@{/login}" th:object="${user}">
+                        <form role="form" action="login" method="post" th:action="@{/dologin}" th:object="${user}">
                             <fieldset>
 
                                 <!--<p th:if="${#fields.hasErrors('loginName')}" th:errors="*{loginName}">Incorrect data</p>  placeholder="E-mail"  -->
@@ -84,19 +84,19 @@
     </div>
 
     <!-- jQuery -->
-    <script src="../../../../../boot-common/src/main/resources/static/bower_components/jquery/dist/jquery.min.js"
+    <script src="../bower_components/jquery/dist/jquery.min.js"
             th:src="@{/bower_components/jquery/dist/jquery.min.js}"></script>
 
     <!-- Bootstrap Core JavaScript -->
-    <script src="../../../../../boot-common/src/main/resources/static/bower_components/bootstrap/dist/js/bootstrap.min.js"
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"
             th:src="@{/bower_components/bootstrap/dist/js/bootstrap.min.js}"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
-    <script src="../../../../../boot-common/src/main/resources/static/bower_components/metisMenu/dist/metisMenu.min.js"
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"
             th:src="@{/bower_components/metisMenu/dist/metisMenu.min.js}"></script>
 
     <!-- Custom Theme JavaScript -->
-    <script src="../../../../../boot-common/src/main/resources/static/dist/js/sb-admin-2.js"
+    <script src="../dist/js/sb-admin-2.js"
             th:src="@{/dist/js/sb-admin-2.js}"></script>
 
 </body>
