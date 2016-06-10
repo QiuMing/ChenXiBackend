@@ -79,4 +79,10 @@ public class UserServiceTest extends  AbstractServiceTests {
         Pageable pageable = new PageRequest(0, 10);
          System.out.println(JSON.toJSONString(userProfileRepository.findAll(pageable)));
     }
+
+    @Test
+    public void test_findByName(){
+        System.out.println((JSON.toJSONString(nutritionRepository.findByName("方便面"))));
+    }
+
 }

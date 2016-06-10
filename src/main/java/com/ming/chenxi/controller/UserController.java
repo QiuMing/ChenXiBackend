@@ -3,8 +3,10 @@ package com.ming.chenxi.controller;
 import com.alibaba.fastjson.JSON;
 import com.ming.chenxi.config.CommonSting;
 import com.ming.chenxi.domain.MobileUser;
+import com.ming.chenxi.domain.Nutrition;
 import com.ming.chenxi.domain.User;
 import com.ming.chenxi.domain.UserProfile;
+import com.ming.chenxi.repository.NutritionRepository;
 import com.ming.chenxi.repository.UserProfileRepository;
 import com.ming.chenxi.service.UserServiceI;
 import io.jsonwebtoken.Jwts;
@@ -14,10 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import java.util.*;
@@ -32,6 +31,9 @@ public class UserController {
     @Autowired
     protected UserProfileRepository userProfileRepository;
 
+    @Autowired
+    private NutritionRepository nutritionRepository;
+
     private final  String key = "secretkey";
 
     private final Map<String, List<String>> userDb = new HashMap<>();
@@ -45,8 +47,8 @@ public class UserController {
      * 登陆成功，设置sub,是claim 默认的字段，并且设置自定义的roles 字段
      */
     @RequestMapping(value = "login", method = RequestMethod.POST)
-    public MobileUser login(@RequestBody  User loginUser)
-        throws ServletException {
+    public MobileUser login(@RequestBody  User loginUser) {
+        log.info("有用户正在请求登录"+JSON.toJSONString(loginUser));
         MobileUser mobileUser = new MobileUser();
 
         String phone = loginUser.getPhone();
@@ -89,7 +91,7 @@ public class UserController {
      */
     @RequestMapping(value = "register", method = RequestMethod.POST)
     public MobileUser register(@RequestBody   User registerUser)throws ServletException{
-
+        log.info("有用户正在请求注册"+JSON.toJSONString(registerUser));
         MobileUser mobileUser = new MobileUser();
 
         String phone = registerUser.getPhone();
@@ -120,10 +122,10 @@ public class UserController {
         return mobileUser;
     }
 
-    @RequestMapping(value = "/test")
-    public User a(){
-        System.out.println("测试响应");
-        return  new User("kkk","hh");
+    @RequestMapping(value="getByName")
+    public @ResponseBody  Nutrition getByNameWithoutJwt(@RequestParam(value="name")String name){
+        log.info("查询的name 为"+name);
+        return nutritionRepository.findByName(name);
     }
 
 }

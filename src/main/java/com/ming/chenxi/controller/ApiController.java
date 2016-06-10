@@ -1,14 +1,13 @@
 package com.ming.chenxi.controller;
 
+import com.ming.chenxi.domain.Nutrition;
 import com.ming.chenxi.domain.User;
 import com.ming.chenxi.domain.UserProfile;
+import com.ming.chenxi.repository.NutritionRepository;
 import com.ming.chenxi.service.UserServiceI;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +22,9 @@ public class ApiController {
 
     @Autowired
     private UserServiceI userServiceI;
+
+    @Autowired
+    private NutritionRepository nutritionRepository;
 
     /**
      * 从claims  提取数据
@@ -44,5 +46,12 @@ public class ApiController {
 
         UserProfile userProfile = userServiceI.getUserProfileByUserId(user.getUserId());
         return userProfile;
+    }
+
+    @RequestMapping(value="getByName")
+    public @ResponseBody
+    Nutrition getByNameWithoutJwt(@RequestParam(value="name")String name){
+
+        return nutritionRepository.findByName(name);
     }
 }
