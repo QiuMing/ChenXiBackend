@@ -83,7 +83,7 @@ public class BackendController {
 
         Pageable pageable = new PageRequest(page, pageSize);
         Page<Nutrition> pages = nutritionRepository.findAll(pageable);
-
+        System.out.println(JSONObject.toJSONString(pages));
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("total",pages.getTotalElements());
         jsonObject.put("rows", pages.getContent());
