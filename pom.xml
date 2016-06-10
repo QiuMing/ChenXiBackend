@@ -22,7 +22,6 @@
         <jjwt.version>0.6.0</jjwt.version>
      </properties>
 
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,6 +76,7 @@
                 </executions>
                 <configuration>
                     <addResources>false</addResources>
+                    <jvmArguments>-Dfile.encoding=UTF-8</jvmArguments> 
                 </configuration>
             </plugin>
         </plugins>
